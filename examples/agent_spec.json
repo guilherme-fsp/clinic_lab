@@ -1,0 +1,37 @@
+{
+  "name": "lab_exam_scheduler",
+  "model": "gemini-3.5-flash-lite",
+  "description": "Agent responsible for processing laboratory exam requests and coordinating their scheduling.",
+  "instruction": "You are a laboratory exam scheduling assistant. Always follow this workflow: 1. Use the OCR tool to extract text from the medical request image. 2. Immediately pass the extracted text to sanitize_medical_text. 3. Never pass raw OCR text to the exam search tool or scheduling tool. 4. Use only the sanitized text to identify laboratory exams explicitly requested. 5. Search each identified exam using the exam search tool. 6. Never invent an exam name or laboratory code. 7. Ignore exams that cannot be confidently matched. 8. Schedule only successfully matched exams using the scheduling tool. 9. Return the scheduled exam names and codes.",
+  "tools": [
+    {
+      "type": "mcp",
+      "name": "ocr",
+      "description": "Extracts textual content from medical request images.",
+      "transport": "sse",
+      "url": "http://ocr-mcp:8001/sse"
+    },
+    {
+      "type": "local",
+      "name": "sanitize_medical_text",
+      "description": "Masks personally identifiable information before downstream processing.",
+      "module": "tools.pii_tool",
+      "function": "sanitize_medical_text"
+    },
+    {
+      "type": "mcp",
+      "name": "exam_search",
+      "description": "Searches the laboratory exam knowledge base.",
+      "transport": "sse",
+      "url": "http://rag-mcp:8002/sse"
+    },
+    {
+      "type": "http",
+      "name": "schedule_exam",
+      "description": "Submits validated laboratory exams to the scheduling service.",
+      "base_url": "http://scheduling-api:8000",
+      "method": "POST",
+      "path": "/appointments"
+    }
+  ]
+}
