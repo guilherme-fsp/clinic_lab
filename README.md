@@ -425,6 +425,11 @@ Os testes cobrem, entre outros pontos:
 - integração com os servidores MCP;
 - integração da ferramenta de agendamento.
 
+### Evidências de funcionamento
+
+As evidências de funcionamento estão disponíveis na pasta:
+exec_evidences/
+
 ## Decisões de arquitetura
 
 ### Código gerado não versionado
@@ -489,11 +494,8 @@ As principais fontes técnicas consultadas durante a implementação foram:
 - documentação oficial do Google Agent Development Kit (ADK), incluindo agentes e ferramentas;
 - documentação oficial do Model Context Protocol e do MCP Python SDK, incluindo servidores, clientes e transports como SSE e HTTP;
 - documentação oficial do FastAPI, usada como referência para endpoints, modelos e Swagger UI;
-- documentação do Pydantic;
-- documentação do Docker e Docker Compose;
-- documentação da biblioteca `httpx`;
 - documentação do Google Gen AI SDK;
-- documentação do `pytest`.
+
 
 ## Execução rápida
 
