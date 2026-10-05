@@ -40,6 +40,8 @@ O código do agente não precisa existir previamente no repositório: ele é pro
 
 ## Arquitetura
 
+A arquitetura do projeto foi organizada em camadas para separar responsabilidades entre interface, orquestração, execução do agente e serviços auxiliares. Em vez de um único monólito, o sistema combina um transpilador de especificações, um runtime dinâmico do agente, provedores MCP (OCR e RAG) e uma API de agendamento, todos conectados por uma rede Docker.
+
 ```text
                       ┌─────────────────────────┐
                       │      Swagger / API      │
@@ -89,17 +91,22 @@ O código do agente não precisa existir previamente no repositório: ele é pro
                       └─────────────────────────┘
 ```
 
+
 ### Componentes
 
-- `transpiler/`: validação da especificação e geração do código Python.
-- `runtime/`: carregamento dinâmico e execução do agente Google ADK.
-- `mcp_servers/ocr/`: servidor MCP responsável pela extração de texto.
-- `mcp_servers/rag/`: servidor MCP responsável pela recuperação de exames.
-- `guardrails/pii/`: detecção e mascaramento de dados pessoais.
-- `scheduling_api/`: API fictícia de agendamento construída com FastAPI.
+- `transpiler/`: validação da especificação, geração do código do agente e compilação do módulo Python gerado.
+- `runtime/`: carregamento dinâmico do módulo gerado e execução do agente Google ADK.
+- `mcp_servers/ocr/`: servidor MCP responsável pela extração de texto a partir da imagem de entrada.
+- `mcp_servers/rag/`: servidor MCP responsável pela busca e recuperação de exames em uma base fictícia.
+- `guardrails/pii/`: detecção e mascaramento de dados pessoais em textos médicos antes do processamento.
+- `scheduling_api/`: API fictícia de agendamento produzida em FastAPI.
+- `tools/`: utilitários locais utilizados pelo agente, como a ferramenta de sanitização PII.
 - `data/exams.json`: base fictícia com mais de 100 exames laboratoriais.
-- `tests/`: testes unitários e de integração.
-- `examples/`: especificação e imagem usadas na demonstração.
+- `examples/`: especificações e imagens usadas para demonstrar o uso do sistema.
+- `config/`: configuração do projeto e carregamento de variáveis de ambiente.
+- `tests/`: testes unitários e de integração que validam o transpilador, o runtime e os serviços auxiliares.
+- `generated/`: artefatos Python gerados dinamicamente para cada agente.
+- `docker-compose.yml`: orquestração dos serviços que compõem a solução em rede local.
 
 ### Especificação e geração do agente
 
@@ -432,13 +439,36 @@ exec_evidences/
 
 ## Decisões de arquitetura
 
-### Código gerado não versionado
+### 1) Arquitetura orientada a pipeline com responsabilidades explícitas
 
-O agente final é tratado como um artefato produzido pelo transpilador. Por isso, `generated/*.py` não representa código-fonte mantido manualmente. Essa escolha demonstra que o módulo executado pelo Google ADK foi criado a partir do JSON enviado ao transpilador.
+O projeto foi desenhado como um pipeline em etapas (transpilação → execução do agente → OCR → sanitização → recuperação de exames → agendamento), em vez de concentrar toda a lógica em um único serviço.  
+Essa decisão facilita rastreabilidade do fluxo, isolamento de falhas e evolução incremental de cada etapa sem reescrever o sistema completo.
 
-### Separação entre transpilação e geração de código
+**Trade-off:** há mais componentes para operar, mas com maior clareza de fronteiras técnicas.
 
-A lógica principal está centralizada no serviço de transpilação, que pode ser usado por diferentes interfaces:
+### 2) Contrato do agente como entrada primária (JSON + schemas)
+
+O contrato do agente é recebido em JSON e validado com modelos Pydantic antes de qualquer geração de código.  
+Essa decisão reduz ambiguidade, evita geração de agentes com configuração inválida e transforma erros de configuração em erros explícitos e antecipados.
+
+**Motivação:** tornar o processo reproduzível e previsível tanto pela API quanto pela CLI.  
+**Impacto:** facilita testes de validação e evolução de versão do contrato.
+
+### 3) Código do agente gerado dinamicamente e tratado como artefato
+
+`generated/*.py` não é fonte editada manualmente; é artefato de compilação da especificação.  
+A decisão reforça a separação entre:
+
+- **fonte de verdade declarativa**: JSON de especificação;
+- **artefato executável**: módulo Python gerado para o ADK.
+
+Antes de persistir, o código é validado com `compile()` para detectar erro sintático imediatamente.
+
+**Trade-off:** debugging pode exigir inspeção do código gerado, mas o ganho é comprovar que a execução deriva do contrato enviado.
+
+### 4) Separação entre interfaces de entrada e núcleo de transpilação
+
+A lógica principal foi centralizada no serviço de transpilação, consumido por API HTTP e CLI:
 
 ```text
 CLI ────────┐
@@ -446,11 +476,76 @@ CLI ────────┐
 HTTP API ───┘
 ```
 
-Isso evita que a API dependa diretamente da CLI e reduz duplicação.
+Essa decisão elimina duplicação de regras, mantém consistência funcional entre canais e reduz custo de manutenção.
 
-### Serviços externos desacoplados
+### 5) Runtime independente do transpilador (carregamento dinâmico)
 
-OCR, recuperação de exames e agendamento têm responsabilidades separadas. Assim, cada componente pode ser substituído sem alterar o núcleo do transpilador.
+O runtime executa módulos gerados sem acoplar a execução à camada de geração.  
+Com isso, a transpilação e a execução podem evoluir de forma independente (inclusive em pipelines diferentes no futuro, como pré-geração e execução posterior).
+
+**Benefício operacional:** permite reuso do runtime para diferentes agentes gerados a partir do mesmo padrão de contrato.
+
+### 6) Integração por ferramentas especializadas (MCP + HTTP + local)
+
+A decisão foi usar ferramentas com papéis distintos:
+
+- **MCP OCR** para extração textual de imagem;
+- **ferramenta local de PII** para sanitização determinística;
+- **MCP RAG** para busca de exames;
+- **HTTP tool** para integração com API de agendamento.
+
+Essa composição evita concentrar tudo no prompt do agente e favorece governança por componente.
+
+### 7) Desacoplamento de serviços externos por responsabilidade
+
+OCR, recuperação de exames e agendamento são serviços isolados, com contratos próprios.  
+Esse desenho reduz impacto de mudanças locais (ex.: trocar engine de OCR, alterar fonte de dados de exames, substituir backend de agendamento) sem reescrever o transpilador.
+
+**Trade-off:** há custo de integração entre serviços, compensado por flexibilidade arquitetural.
+
+### 8) Privacidade por design no ponto de orquestração
+
+A sanitização de dados pessoais foi posicionada imediatamente após OCR e antes de recuperação/agendamento.  
+A escolha reduz propagação de PII ao longo do fluxo e estabelece uma fronteira clara de tratamento de dados sensíveis.
+
+Além disso, os logs evitam registrar payloads completos de ferramentas, reduzindo risco de exposição acidental.
+
+### 9) Base de exames local para demonstração determinística
+
+A base em `data/exams.json` com indexação no serviço RAG foi escolhida para garantir repetibilidade da demonstração e independência de provedores externos.  
+Isso permite validar o pipeline fim a fim com baixa variabilidade e menor custo operacional.
+
+**Evolução natural:** substituir por fonte real (banco/serviço corporativo) preservando a interface do serviço de busca.
+
+### 10) Orquestração sequencial com paralelismo oportunista
+
+O fluxo principal é sequencial por dependência de dados (a próxima etapa depende da saída anterior), mas consultas de exames podem ser emitidas de forma independente quando múltiplos itens são identificados.
+
+Essa decisão equilibra:
+
+- **correção do processo clínico-operacional** (ordem garantida),
+- **eficiência** (paralelização apenas onde não há dependência).
+
+### 11) Estratégia de deploy para ambiente local reproduzível
+
+Docker Compose foi adotado para subir API, runtime e serviços MCP na mesma rede, com endereçamento previsível entre contêineres.  
+Isso reduz atrito de setup e aproxima o comportamento local de um ambiente distribuído real.
+
+### 12) Estratégia de qualidade orientada a contratos e integração
+
+Os testes cobrem validação de esquema, geração de código, execução, ferramentas e integrações entre serviços.  
+A decisão foi combinar testes unitários (regras locais) com integração (fluxo entre componentes), pois a confiabilidade do projeto depende das fronteiras entre módulos.
+
+### 13) Escalabilidade evolutiva sem ruptura
+
+A arquitetura foi preparada para expansão gradual:
+
+- adicionar novas ferramentas no contrato JSON sem alterar o núcleo;
+- trocar implementações de OCR/RAG/agendamento mantendo contratos;
+- ampliar observabilidade (métricas/tracing) sem refatorar o pipeline;
+- introduzir versionamento explícito do schema de agente.
+
+Em resumo, o desenho privilegia **modularidade, rastreabilidade, segurança de dados e capacidade de evolução**, aceitando a complexidade adicional de operar múltiplos componentes em troca de maior robustez no escopo completo da solução.
 
 ## Processo de desenvolvimento e uso de IA
 
