@@ -1,0 +1,478 @@
+[
+  {
+    "name": "Hemograma Completo",
+    "code": "LAB001"
+  },
+  {
+    "name": "Glicemia em Jejum",
+    "code": "LAB002"
+  },
+  {
+    "name": "Hemoglobina Glicada",
+    "code": "LAB003"
+  },
+  {
+    "name": "Colesterol Total",
+    "code": "LAB004"
+  },
+  {
+    "name": "Colesterol HDL",
+    "code": "LAB005"
+  },
+  {
+    "name": "Colesterol LDL",
+    "code": "LAB006"
+  },
+  {
+    "name": "Triglicerídeos",
+    "code": "LAB007"
+  },
+  {
+    "name": "Creatinina",
+    "code": "LAB008"
+  },
+  {
+    "name": "Ureia",
+    "code": "LAB009"
+  },
+  {
+    "name": "Ácido Úrico",
+    "code": "LAB010"
+  },
+  {
+    "name": "Sódio",
+    "code": "LAB011"
+  },
+  {
+    "name": "Potássio",
+    "code": "LAB012"
+  },
+  {
+    "name": "Cálcio Total",
+    "code": "LAB013"
+  },
+  {
+    "name": "Magnésio",
+    "code": "LAB014"
+  },
+  {
+    "name": "Ferro Sérico",
+    "code": "LAB015"
+  },
+  {
+    "name": "Ferritina",
+    "code": "LAB016"
+  },
+  {
+    "name": "Vitamina B12",
+    "code": "LAB017"
+  },
+  {
+    "name": "Vitamina D",
+    "code": "LAB018"
+  },
+  {
+    "name": "TSH",
+    "code": "LAB019"
+  },
+  {
+    "name": "T4 Livre",
+    "code": "LAB020"
+  },
+  {
+    "name": "T3 Total",
+    "code": "LAB021"
+  },
+  {
+    "name": "AST",
+    "code": "LAB022"
+  },
+  {
+    "name": "ALT",
+    "code": "LAB023"
+  },
+  {
+    "name": "Gama GT",
+    "code": "LAB024"
+  },
+  {
+    "name": "Fosfatase Alcalina",
+    "code": "LAB025"
+  },
+  {
+    "name": "Bilirrubina Total",
+    "code": "LAB026"
+  },
+  {
+    "name": "Bilirrubina Direta",
+    "code": "LAB027"
+  },
+  {
+    "name": "Proteína C Reativa",
+    "code": "LAB028"
+  },
+  {
+    "name": "VHS",
+    "code": "LAB029"
+  },
+  {
+    "name": "Albumina",
+    "code": "LAB030"
+  },
+  {
+    "name": "Proteínas Totais",
+    "code": "LAB031"
+  },
+  {
+    "name": "Amilase",
+    "code": "LAB032"
+  },
+  {
+    "name": "Lipase",
+    "code": "LAB033"
+  },
+  {
+    "name": "Insulina",
+    "code": "LAB034"
+  },
+  {
+    "name": "Cortisol",
+    "code": "LAB035"
+  },
+  {
+    "name": "Prolactina",
+    "code": "LAB036"
+  },
+  {
+    "name": "Testosterona Total",
+    "code": "LAB037"
+  },
+  {
+    "name": "Estradiol",
+    "code": "LAB038"
+  },
+  {
+    "name": "FSH",
+    "code": "LAB039"
+  },
+  {
+    "name": "LH",
+    "code": "LAB040"
+  },
+  {
+    "name": "PSA Total",
+    "code": "LAB041"
+  },
+  {
+    "name": "CEA",
+    "code": "LAB042"
+  },
+  {
+    "name": "Alfa Fetoproteína",
+    "code": "LAB043"
+  },
+  {
+    "name": "CA 125",
+    "code": "LAB044"
+  },
+  {
+    "name": "CA 19-9",
+    "code": "LAB045"
+  },
+  {
+    "name": "HBsAg",
+    "code": "LAB047"
+  },
+  {
+    "name": "Anti-HBs",
+    "code": "LAB048"
+  },
+  {
+    "name": "Anti-HCV",
+    "code": "LAB049"
+  },
+  {
+    "name": "VDRL",
+    "code": "LAB050"
+  },
+  {
+    "name": "Toxoplasmose IgG",
+    "code": "LAB051"
+  },
+  {
+    "name": "Toxoplasmose IgM",
+    "code": "LAB052"
+  },
+  {
+    "name": "Rubéola IgG",
+    "code": "LAB053"
+  },
+  {
+    "name": "Rubéola IgM",
+    "code": "LAB054"
+  },
+  {
+    "name": "Citomegalovírus IgG",
+    "code": "LAB055"
+  },
+  {
+    "name": "Citomegalovírus IgM",
+    "code": "LAB056"
+  },
+  {
+    "name": "EAS",
+    "code": "LAB057"
+  },
+  {
+    "name": "Urocultura",
+    "code": "LAB058"
+  },
+  {
+    "name": "Parasitológico de Fezes",
+    "code": "LAB059"
+  },
+  {
+    "name": "Sangue Oculto nas Fezes",
+    "code": "LAB060"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 061",
+    "code": "LAB061"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 062",
+    "code": "LAB062"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 063",
+    "code": "LAB063"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 064",
+    "code": "LAB064"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 065",
+    "code": "LAB065"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 066",
+    "code": "LAB066"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 067",
+    "code": "LAB067"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 068",
+    "code": "LAB068"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 069",
+    "code": "LAB069"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 070",
+    "code": "LAB070"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 071",
+    "code": "LAB071"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 072",
+    "code": "LAB072"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 073",
+    "code": "LAB073"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 074",
+    "code": "LAB074"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 075",
+    "code": "LAB075"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 076",
+    "code": "LAB076"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 077",
+    "code": "LAB077"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 078",
+    "code": "LAB078"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 079",
+    "code": "LAB079"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 080",
+    "code": "LAB080"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 081",
+    "code": "LAB081"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 082",
+    "code": "LAB082"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 083",
+    "code": "LAB083"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 084",
+    "code": "LAB084"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 085",
+    "code": "LAB085"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 086",
+    "code": "LAB086"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 087",
+    "code": "LAB087"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 088",
+    "code": "LAB088"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 089",
+    "code": "LAB089"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 090",
+    "code": "LAB090"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 091",
+    "code": "LAB091"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 092",
+    "code": "LAB092"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 093",
+    "code": "LAB093"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 094",
+    "code": "LAB094"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 095",
+    "code": "LAB095"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 096",
+    "code": "LAB096"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 097",
+    "code": "LAB097"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 098",
+    "code": "LAB098"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 099",
+    "code": "LAB099"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 100",
+    "code": "LAB100"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 101",
+    "code": "LAB101"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 102",
+    "code": "LAB102"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 103",
+    "code": "LAB103"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 104",
+    "code": "LAB104"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 105",
+    "code": "LAB105"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 106",
+    "code": "LAB106"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 107",
+    "code": "LAB107"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 108",
+    "code": "LAB108"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 109",
+    "code": "LAB109"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 110",
+    "code": "LAB110"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 111",
+    "code": "LAB111"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 112",
+    "code": "LAB112"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 113",
+    "code": "LAB113"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 114",
+    "code": "LAB114"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 115",
+    "code": "LAB115"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 116",
+    "code": "LAB116"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 117",
+    "code": "LAB117"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 118",
+    "code": "LAB118"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 119",
+    "code": "LAB119"
+  },
+  {
+    "name": "Marcador Laboratorial Fictício 120",
+    "code": "LAB120"
+  }
+]
