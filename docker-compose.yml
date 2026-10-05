@@ -1,0 +1,86 @@
+services:
+
+  scheduling-api:
+    build:
+      context: .
+    command:
+      [
+        "uvicorn",
+        "scheduling_api.app:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ]
+    ports:
+      - "18000:8000"
+    networks:
+      - lab-network
+
+  ocr-mcp:
+    build:
+      context: .
+    command:
+      [
+        "python",
+        "-m",
+        "mcp_servers.ocr.server"
+      ]
+    env_file:
+      - .env
+    networks:
+      - lab-network
+
+  rag-mcp:
+    build:
+      context: .
+    command:
+      [
+        "python",
+        "-m",
+        "mcp_servers.rag.server"
+      ]
+    env_file:
+      - .env
+    networks:
+      - lab-network
+
+  agent:
+    build:
+      context: .
+    command:
+      [
+        "python",
+        "main.py",
+        "examples/imagem_qualquer.png"
+      ]
+    env_file:
+      - .env
+    depends_on:
+      - scheduling-api
+      - ocr-mcp
+      - rag-mcp
+    networks:
+      - lab-network
+
+  transpiler-api:
+      build:
+        context: .
+      command:
+        [
+          "uvicorn",
+          "transpiler.api:app",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "8003"
+        ]
+      ports:
+        - "18003:8003"
+      networks:
+      - lab-network
+
+
+networks:
+  lab-network:
+    driver: bridge
