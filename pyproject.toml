@@ -1,0 +1,19 @@
+[project]
+name = "technical-challenge"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+dependencies = [
+    "google-adk[mcp]",
+    "httpx",
+    "pydantic",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
