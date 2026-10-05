@@ -499,6 +499,8 @@ As principais fontes técnicas consultadas durante a implementação foram:
 
 ## Execução rápida
 
+Preencha o .env seguindo o exemplo .env.example
+
 Inicie os serviços:
 
 ```bash
