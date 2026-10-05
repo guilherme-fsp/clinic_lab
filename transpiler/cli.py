@@ -1,66 +1,36 @@
+import argparse
+import json
 from pathlib import Path
 
-from transpiler.generators.agent_generator import (
-    AgentCodeGenerator,
-)
-from transpiler.validators.spec_validator import (
-    SpecValidationError,
-    load_agent_spec,
-)
+from transpiler.schemas.agent import AgentSpec
+from transpiler.service import transpile_agent
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(
+        description=("Generate a Google ADK agent from a JSON specification.")
+    )
 
-    try:
-        spec = load_agent_spec(
-            "examples/agent_spec.json"
+    parser.add_argument("spec_path", type=Path, help="Path to the agent specification JSON.")
+
+    args = parser.parse_args()
+
+    spec_path = args.spec_path
+
+    if not spec_path.exists():
+        raise SystemExit(
+            f"Specification file not found: {spec_path}"
         )
 
-    except SpecValidationError as exc:
-        print(exc)
-        raise SystemExit(1)
-
-    print(
-        "Specification validated successfully."
+    raw_spec = json.loads(
+        spec_path.read_text(encoding="utf-8")
     )
 
-    generator = AgentCodeGenerator()
+    spec = AgentSpec.model_validate(raw_spec)
 
-    generated_code = generator.generate(
-        spec
-    )
+    output_path = transpile_agent(spec)
 
-    try:
-        compile(
-            generated_code,
-            f"<generated:{spec.name}>",
-            "exec",
-        )
-    except SyntaxError as exc:
-        print(
-            f"Generated code is invalid: {exc}"
-
-        )
-
-        raise SystemExit(1)
-
-    output_path = Path(
-        f"generated/{spec.name}.py"
-    )
-
-    output_path.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    output_path.write_text(
-        generated_code,
-        encoding="utf-8",
-    )
-
-    print(
-        f"Generated agent: {output_path}"
-    )
+    print(f"Agent generated successfully: {output_path}")
 
 
 if __name__ == "__main__":

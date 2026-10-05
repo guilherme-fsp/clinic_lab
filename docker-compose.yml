@@ -45,23 +45,6 @@ services:
     networks:
       - lab-network
 
-  agent:
-    build:
-      context: .
-    command:
-      [
-        "python",
-        "main.py",
-        "examples/imagem_qualquer.png"
-      ]
-    env_file:
-      - .env
-    depends_on:
-      - scheduling-api
-      - ocr-mcp
-      - rag-mcp
-    networks:
-      - lab-network
 
   transpiler-api:
       build:
@@ -77,10 +60,40 @@ services:
         ]
       ports:
         - "18003:8003"
+      volumes:
+        - generated-agents:/app/generated
       networks:
       - lab-network
 
 
+  agent-runtime:
+    build:
+      context: .
+    command:
+      [
+        "uvicorn",
+        "runtime.api:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8004"
+      ]
+    ports:
+      - "18004:8004"
+    env_file:
+      - .env
+    volumes:
+      - generated-agents:/app/generated
+    depends_on:
+      - ocr-mcp
+      - rag-mcp
+      - scheduling-api
+    networks:
+      - lab-network
+
+volumes:
+  generated-agents:
+  
 networks:
   lab-network:
     driver: bridge

@@ -1,9 +1,6 @@
 import asyncio
-import base64
-import mimetypes
 import sys
 from pathlib import Path
-import hashlib
 
 from runtime.agent_runner import (
     run_generated_agent,
@@ -49,7 +46,7 @@ Follow your configured workflow exactly.
 """
 
     response = await run_generated_agent(
-        agent_name="lab_exam_scheduler",
+        agent_name=agent_name,
         message=message,
     )
 
