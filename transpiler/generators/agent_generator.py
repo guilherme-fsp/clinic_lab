@@ -1,3 +1,5 @@
+import logging
+
 from transpiler.generators.http_generator import (
     generate_http_tool,
 )
@@ -11,6 +13,12 @@ from transpiler.schemas.tool import (
     LocalToolSpec
 )
 
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 class AgentCodeGenerator:
 
@@ -46,6 +54,8 @@ class AgentCodeGenerator:
         sections.append(
             agent_definition
         )
+
+        logger.info("class: AgentCodeGenerator:=> generate: Agent code generated successfully for agent: %s", spec.name)
 
         return "\n\n".join(
             sections

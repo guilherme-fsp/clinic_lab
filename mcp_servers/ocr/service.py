@@ -5,6 +5,13 @@ from google import genai
 from google.genai import types
 import mimetypes
 from pathlib import Path
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 
 OCR_PROMPT = """
@@ -19,6 +26,7 @@ Rules:
 - Preserve patient names, numbers and exam names exactly as visible.
 - Preserve line breaks whenever possible.
 - Return only the extracted text.
+- Remove names from the extracted text.
 
 """.strip()
 
@@ -40,6 +48,8 @@ class LLMOCRService:
         self.model = model
 
     async def extract_text(self,image_path: str) -> str:
+        logger.info("LLMOCRService: extract_text called with image: %s", image_path)
+        
         path = Path(image_path)
 
         if not path.exists():
@@ -55,6 +65,7 @@ class LLMOCRService:
             )
 
         image_bytes = path.read_bytes()
+        logger.info("LLMOCRService: Read image bytes, size=%d", len(image_bytes))
 
         if not image_bytes:
             raise OCRServiceError(
@@ -84,11 +95,13 @@ class LLMOCRService:
             ) from exc
 
         extracted_text = response.text
+        logger.info("LLMOCRService: OCR model returned text of length=%d", len(extracted_text) if extracted_text else 0)
 
         if not extracted_text:
             raise OCRServiceError(
                 "OCR model returned empty text."
             )
+        logger.info("LLMOCRService: Extracted text: %s", extracted_text)
 
         return extracted_text.strip()
 

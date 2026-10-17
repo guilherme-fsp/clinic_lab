@@ -11,10 +11,19 @@ from mcp_servers.rag.schemas import (
     ExamSearchResult,
 )
 
+import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+logger.info("ExamRAGService: Initializing service")
 def normalize_text(
     text: str,
 ) -> str:
+    logger.info("normalize_text: Normalizing text: %s", text)
 
     normalized = unicodedata.normalize(
         "NFKD",
@@ -40,7 +49,7 @@ def normalize_text(
         " ",
         normalized,
     )
-
+    logger.info("normalize_text: Normalized text: %s", normalized)
     return normalized.strip()
 
 
@@ -59,6 +68,7 @@ class ExamRAGService:
         self,
         repository: ExamRepository,
     ) -> None:
+        logger.info("ExamRAGService: Initializing with repository: %s", repository)
 
         self.exams = repository.get_all()
 
@@ -74,6 +84,7 @@ class ExamRAGService:
         query: str,
         top_k: int = 5,
     ) -> ExamSearchResult:
+        logger.info("ExamRAGService: Searching exams with query: %s, top_k: %d", query, top_k)
 
         if not query.strip():
             return ExamSearchResult(
@@ -109,6 +120,7 @@ class ExamRAGService:
                     score=float(score),
                 )
             )
+            logger.info("ExamRAGService: Added match for exam: %s with score: %f", exam.name, score)
 
         return ExamSearchResult(
             query=query,

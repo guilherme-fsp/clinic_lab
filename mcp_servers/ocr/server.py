@@ -7,6 +7,15 @@ from mcp_servers.ocr.service import (
 
 from config.settings import settings_config
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
 settings = settings_config()
 
 client = genai.Client()
@@ -28,13 +37,13 @@ async def extract_medical_request(image_path: str) -> dict[str, str]:
     laboratory medical request image.
 
     """
-    print(
-        f">>> OCR TOOL CALLED: {image_path}"
-    )
+    logger.info("extract_medical_request: OCR tool called with image: %s", image_path)
+
 
     extracted_text = await ocr_service.extract_text(
             image_path=image_path,
         )
+    logger.info("extract_medical_request: OCR tool finished processing image: %s", image_path)
 
     return {
             "extracted_text": extracted_text,
